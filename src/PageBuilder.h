@@ -2,8 +2,8 @@
  *  Declaration of PageBuilder class and accompanying PageElement, PageArgument class.
  *  @file PageBuilder.h
  *  @author hieromon@gmail.com
- *  @version  1.4.0
- *  @date 2020-04-10
+ *  @version  1.4.2
+ *  @date 2020-05-25
  *  @copyright  MIT license.
  */
 
@@ -33,16 +33,21 @@ using WebServerClass = WebServer;
 // Uncomment the following PB_DEBUG to enable debug output.
 // #define PB_DEBUG
 
+// SPIFFS has deprecated on EP8266 core. This flag indicates that
+// the migration to LittleFS has not completed.
+// Uncomment the following PB_USE_SPIFFS to enable SPIFFS.
+// #define PB_USE_SPIFFS
+
 // Debug output destination can be defined externally with PB_DEBUG_PORT
 #ifndef PB_DEBUG_PORT
 #define PB_DEBUG_PORT Serial
 #endif // !PB_DEBUG_PORT
 #ifdef PB_DEBUG
-#define PB_DBG_DUMB(...) do {PB_DEBUG_PORT.printf( __VA_ARGS__ );} while (0)
-#define PB_DBG(...) do {PB_DEBUG_PORT.print("[PB] "); PB_DEBUG_PORT.printf( __VA_ARGS__ );} while (0)
+#define PB_DBG_DUMB(fmt, ...) do {PB_DEBUG_PORT.printf_P((PGM_P)PSTR(fmt), ## __VA_ARGS__ );} while (0)
+#define PB_DBG(fmt, ...) do {PB_DEBUG_PORT.printf_P((PGM_P)PSTR("[PB] " fmt), ## __VA_ARGS__ );} while (0)
 #else
-#define PB_DBG_DUMB(...)
-#define PB_DBG(...)
+#define PB_DBG_DUMB(...) do {(void)0;} while (0)
+#define PB_DBG(...) do {(void)0;} while (0)
 #endif // !PB_DEBUG
 
 #define PAGEELEMENT_FILE  "file:"
